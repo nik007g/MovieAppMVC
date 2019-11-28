@@ -17,7 +17,6 @@ namespace MovieApp.Controllers
         {
             objmovie = new MovieDataAcessLayerEF(context);
         }
-
         [HttpGet]
         public IActionResult Create()
         {
