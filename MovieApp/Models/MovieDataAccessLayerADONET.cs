@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MovieApp.Models
 {
-    public class MovieDataAccessLayer : IDataAccessLayer
+    public class MovieDataAccesLayerADONET : IDataAccessLayer
     {
         string connectionString = "Server=FSIND-LT-43; Database= MovieProject; Trusted_Connection = True";
         public void AddMovie(Movie movie)

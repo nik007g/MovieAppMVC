@@ -15,7 +15,7 @@ namespace MovieApp.Controllers
         IDataAccessLayer objmovie;
         public MovieController(MovieProjectContext context)
         {
-            objmovie = new MovieDataAccessLayer();
+            objmovie = new MovieDataAcessLayerEF(context);
         }
 
         [HttpGet]
