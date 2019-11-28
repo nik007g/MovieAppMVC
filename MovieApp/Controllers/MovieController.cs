@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using MovieApp.Models;
+using MovieApp.Models.DataAccessLayers;
 
 namespace MovieApp.Controllers
 {

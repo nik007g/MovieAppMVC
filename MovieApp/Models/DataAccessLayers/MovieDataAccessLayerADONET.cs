@@ -5,7 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MovieApp.Models
+namespace MovieApp.Models.DataAccessLayers
 {
     public class MovieDataAccesLayerADONET : IDataAccessLayer
     {
