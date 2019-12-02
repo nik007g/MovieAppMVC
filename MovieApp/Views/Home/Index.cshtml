@@ -1,9 +1,14 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
+        Layout = "~/Views/Shared/_Layout.cshtml";
+
 }
 
-<div class="text-center">
-    <h1 class="display-3">Welcome To Movie App</h1>
-    <p style="font-size:27px">Login To See Details of All movies</p>
-    <a class="btn btn-outline-primary w-50" asp-controller="Home"asp-action="User">Login</a>
-</div>
+    <div class="text-center">
+        <h6 class="text-danger">@TempData["SessionError"]
+        </h6>
+        <h1 class="display-3">Welcome, to Movies App</h1>
+       
+        <p style="font-size:27px">Login To See Details of All movies</p>
+        <a class="btn btn-outline-primary w-50" asp-controller="Home" asp-action="User">Login</a>
+    </div>

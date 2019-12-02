@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MovieApp.Models;
@@ -31,9 +32,11 @@ namespace MovieApp.Controllers
         [HttpPost]
         public ActionResult User(User user)
         {
-            bool success= UserDataAccessLayer.CheckLogin(user);
+            bool success = UserDataAccessLayer.CheckLogin(user);
             if (success)
             {
+                HttpContext.Session.SetString("Email", user.Email);
+
                 return RedirectToAction("Index", "Movie");
             }
             else
@@ -47,19 +50,28 @@ namespace MovieApp.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult Register( User user)
+        public ActionResult Register(User user)
         {
-           
+
             if (ModelState.IsValid)
             {
-                UserDataAccessLayer.AddUser(user);
-                return View("User");
+                bool success = UserDataAccessLayer.AddUser(user);
+                if (success)
+                {
+                    UserDataAccessLayer.AddUser(user);
+                    return View("User");
+                }
+                else
+                {
+                    ViewData["Error"] = "Registration Failed User Already Exists";
+                    return View("User");
+                }
             }
             else
             {
                 return View("Index");
             }
-             
+
         }
         public IActionResult UpdatePassword()
         {
@@ -91,6 +103,6 @@ namespace MovieApp.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-       
+
     }
 }
