@@ -1,12 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace MovieApp.Models.DataAccessLayers
 {
-    public class MovieDataAcessLayerEF : IDataAccessLayer
+    public class MovieDataAcessLayerEF : IMovieDataAccessLayer
     {
         MovieProjectContext movieAppDBContext;
 
@@ -33,10 +30,11 @@ namespace MovieApp.Models.DataAccessLayers
             movieAppDBContext.SaveChanges();
         }
 
-        public void Update(Movie movie)
+        public bool Update(Movie movie)
         {
             movieAppDBContext.Update(movie);
             movieAppDBContext.SaveChanges();
+            return true;
         }
 
         public Movie GetMovies(int? id)

@@ -1,13 +1,10 @@
 ﻿using Microsoft.Data.SqlClient;
 using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace MovieApp.Models
+namespace MovieApp.Models.DataAccessLayers
 {
-    public class UserDataAccessLayer
+    public class UserDataAccessLayer :IUserDataAccessLayer
     {
         string connectionString = "Server=FSIND-LT-43; Database= MovieProject; Trusted_Connection = True";
         public bool AddUser(User user)
@@ -51,21 +48,24 @@ namespace MovieApp.Models
                 return true;
             }
         }
-        public bool CheckLogin(User user)
+
+      
+
+        public bool CheckLogin(String Email,String Password)
         {
             using (SqlConnection con = new SqlConnection(connectionString))
             {
                 SqlCommand cmd = new SqlCommand("spCheckUser", con);
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@Email", user.Email);
-                cmd.Parameters.AddWithValue("@Password", user.Password);
+                cmd.Parameters.AddWithValue("@Email", Email);
+                cmd.Parameters.AddWithValue("@Password",Password);
                 con.Open();
                 SqlDataReader rdr = cmd.ExecuteReader();
                 while (rdr.Read())
                 {
                     string email = rdr["Email"].ToString();
                     string pass = rdr["Password"].ToString();
-                    if (email == user.Email && pass == user.Password)
+                    if (email == Email && pass == Password)
                     {
                         return true;
                     }

@@ -2,12 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace MovieApp.Models.DataAccessLayers
 {
-    public class MovieDataAccesLayerADONET : IDataAccessLayer
+    public class MovieDataAccesLayerADONET : IMovieDataAccessLayer
     {
         string connectionString = "Server=FSIND-LT-43; Database= MovieProject; Trusted_Connection = True";
         public void AddMovie(Movie movie)
@@ -22,7 +20,6 @@ namespace MovieApp.Models.DataAccessLayers
                 cmd.ExecuteNonQuery();
                 con.Close();
             }
-
         }
         public IEnumerable<Movie> GetAllMovies()
         {
@@ -32,14 +29,11 @@ namespace MovieApp.Models.DataAccessLayers
             {
                 SqlCommand cmd = new SqlCommand("spGetAllMovies", con);
                 cmd.CommandType = CommandType.StoredProcedure;
-
                 con.Open();
                 SqlDataReader rdr = cmd.ExecuteReader();
-
                 while (rdr.Read())
                 {
                     Movie movie = new Movie();
-
                     movie.MovieId = Convert.ToInt32(rdr["MovieID"]);
                     movie.MovieName = rdr["MovieName"].ToString();
                     movie.Rating = Convert.ToInt32(rdr["Rating"]);
@@ -63,7 +57,7 @@ namespace MovieApp.Models.DataAccessLayers
                 con.Close();
             }
         }
-        public void Update(Movie movie)
+        public bool Update(Movie movie)
         {
             using (SqlConnection con = new SqlConnection(connectionString))
             {
@@ -78,6 +72,7 @@ namespace MovieApp.Models.DataAccessLayers
                 cmd.ExecuteNonQuery();
                 con.Close();
             }
+            return true;
         }
         public Movie GetMovies(int? id)
         {

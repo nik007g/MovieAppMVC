@@ -1,22 +1,44 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using MovieApp.Models;
 using MovieApp.Models.DataAccessLayers;
 using Microsoft.AspNetCore.Http;
+using MovieApp.Models.Handlers;
+using MediatR;
+using AutoMapper;
 
 namespace MovieApp.Controllers
 {
     public class MovieController : Controller
     {
-        IDataAccessLayer objmovie;
-        public MovieController(MovieProjectContext context)
+      
+        private IMediator _mediator;
+        private IMapper _mapper;
+        
+        public MovieController(IMediator mediator,IMapper mapper)
         {
-            objmovie = new MovieDataAcessLayerEF(context);
+            _mapper = mapper;
+            _mediator = mediator;
+            
         }
-        [HttpGet]
+
+        public IActionResult Index()
+        {
+           if (checkInvalidSession())
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            ViewData["User"] = HttpContext.Session.GetString("Email");
+            return View(_mediator.Send(new GetAllMoviesRequestModel()).Result.Movies);
+
+        }
+        [HttpPost]
+        public ActionResult Index(string username1)
+        {
+            ViewBag.user = username1;
+            return View();
+        }
         public IActionResult Create()
         {
             if (checkInvalidSession())
@@ -27,8 +49,7 @@ namespace MovieApp.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind] Movie movie)
+        public IActionResult Create([Bind] AddMovieRequestModel movie)
         {
             if (checkInvalidSession())
             {
@@ -36,24 +57,35 @@ namespace MovieApp.Controllers
             }
             if (ModelState.IsValid)
             {
-                 objmovie.AddMovie(movie);
+                 _mediator.Send(movie);
                 return RedirectToAction("Index","Movie");
             }
             return View(movie);
         }
-       public IActionResult Index()
+        public IActionResult Edit(int? id)
         {
             if (checkInvalidSession())
             {
                 return RedirectToAction("Index", "Home");
             }
-            List<Movie> lastmovie = new List<Movie>();
-            lastmovie = objmovie.GetAllMovies().ToList();
-            return View(lastmovie);
-  
+          
+            var movie=_mediator.Send(new GetMoviesRequestModel {MovieId=id });
+            return View(_mapper.Map<UpdateMovieRequestModel>(movie.Result));
         }
 
-
+        [HttpPost]
+        public IActionResult Edit(UpdateMovieRequestModel movie)
+        {
+            if (checkInvalidSession())
+            {
+                return RedirectToAction("Index", "Home");
+            }
+    
+                _mediator.Send(movie);
+                return RedirectToAction("Index", "Movie");
+            
+           
+        }
         [HttpGet]
         public IActionResult Delete(int? id)
         {
@@ -65,13 +97,9 @@ namespace MovieApp.Controllers
             {
                 return NotFound();
             }
-            Movie movie = objmovie.GetMovies(id);
-
-            if (movie == null)
-            {
-                return NotFound();
-            }
-            return View(movie);
+            var movie = _mediator.Send(new GetMoviesRequestModel { MovieId = id });
+            
+            return View(_mapper.Map<Movie>(movie.Result));
         }
         [HttpPost,ActionName("Delete")]
         public IActionResult DeleteConfirmed(int? id)
@@ -80,47 +108,9 @@ namespace MovieApp.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
-            objmovie.Delete(id);
+            var movie = _mediator.Send(new DeleteMovieRequestModel { MovieId = id });
+
             return RedirectToAction("Index","Movie");
-        }
-
-        [HttpGet]
-        public IActionResult Edit(int? id)
-        {
-            if (checkInvalidSession())
-            {
-                return RedirectToAction("Index", "Home");
-            }
-            if (id == null)
-            {
-                return NotFound();
-            }
-            Movie movie = objmovie.GetMovies(id);
-
-            if (movie == null)
-            {
-                return NotFound();
-            }
-            return View(movie);
-        }
-
-        [HttpPost]
-        public IActionResult Edit(int id, [Bind]Movie movie)
-        {
-            if (checkInvalidSession())
-            {
-                return RedirectToAction("Index", "Home");
-            }
-            if (id != movie.MovieId)
-            {
-                return NotFound();
-            }
-            if (ModelState.IsValid)
-            {
-                objmovie.Update(movie);
-                return RedirectToAction("Index","Movie");
-            }
-            return View(movie);
         }
         public bool checkInvalidSession()
         {
@@ -134,7 +124,7 @@ namespace MovieApp.Controllers
         }
         public IActionResult Logout()
         {
-            HttpContext.Session.Remove("email");
+            HttpContext.Session.Remove("Email");
             return RedirectToAction("Index", "Home");
         }
     }

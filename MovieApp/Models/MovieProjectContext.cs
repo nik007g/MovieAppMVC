@@ -1,6 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace MovieApp.Models
 {
@@ -9,14 +7,13 @@ namespace MovieApp.Models
         public MovieProjectContext()
         {
         }
-
         public MovieProjectContext(DbContextOptions<MovieProjectContext> options)
             : base(options)
         {
         }
 
         public virtual DbSet<Movie> Movie { get; set; }
-        public virtual DbSet<UserRegister> UserRegister { get; set; }
+        
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -36,41 +33,6 @@ namespace MovieApp.Models
                 entity.Property(e => e.MovieName)
                     .HasMaxLength(30)
                     .IsUnicode(false);
-            });
-
-            modelBuilder.Entity<UserRegister>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.ToTable("userRegister");
-
-                entity.Property(e => e.ConfirmPassword)
-                    .HasMaxLength(20)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.ContactNumber)
-                    .HasMaxLength(10)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Email)
-                    .HasMaxLength(30)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Fname)
-                    .HasColumnName("FName")
-                    .HasMaxLength(20)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Lname)
-                    .HasColumnName("LName")
-                    .HasMaxLength(20)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Password)
-                    .HasMaxLength(20)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.UserId).ValueGeneratedOnAdd();
             });
 
             OnModelCreatingPartial(modelBuilder);
