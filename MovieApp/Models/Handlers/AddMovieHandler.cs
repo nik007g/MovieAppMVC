@@ -26,7 +26,7 @@ namespace MovieApp.Models.Handlers
     {
         IMovieDataAccessLayer movieDataAccessLayer;
         private IMapper _mapper;
-        public AddMovieHandler(IMapper mapper, IMovieDataAccessLayer _movieDataAccessLayer)
+        public AddMovieHandler( IMapper mapper, IMovieDataAccessLayer _movieDataAccessLayer)
         {
             movieDataAccessLayer = _movieDataAccessLayer;
             _mapper = mapper;

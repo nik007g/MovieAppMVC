@@ -16,7 +16,7 @@ namespace MovieApp.Models
 
             CreateMap<User, UpdatePasswordRequestModel>();
             //  CreateMap<UpdatePasswordRequestModel, User>();
-            CreateMap<Movie, AddMovieRequestModel>();
+            CreateMap<Movie, AddMovieRequestModel>().ReverseMap();
 
             CreateMap<Movie, GetMoviesRequestModel>().ReverseMap();
             

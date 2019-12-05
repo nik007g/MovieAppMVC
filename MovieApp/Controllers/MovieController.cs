@@ -25,10 +25,10 @@ namespace MovieApp.Controllers
 
         public IActionResult Index()
         {
-           if (checkInvalidSession())
+           /*if (checkInvalidSession())
             {
                 return RedirectToAction("Index", "Home");
-            }
+            }*/
             ViewData["User"] = HttpContext.Session.GetString("Email");
             return View(_mediator.Send(new GetAllMoviesRequestModel()).Result.Movies);
 
@@ -49,7 +49,7 @@ namespace MovieApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create([Bind] AddMovieRequestModel movie)
+        public IActionResult Create( AddMovieRequestModel movie)
         {
             if (checkInvalidSession())
             {
@@ -60,6 +60,7 @@ namespace MovieApp.Controllers
                  _mediator.Send(movie);
                 return RedirectToAction("Index","Movie");
             }
+        else
             return View(movie);
         }
         public IActionResult Edit(int? id)

@@ -8,7 +8,7 @@ namespace MovieApp.Models.DataAccessLayers
     public class MovieDataAccesLayerADONET : IMovieDataAccessLayer
     {
         string connectionString = "Server=FSIND-LT-43; Database= MovieProject; Trusted_Connection = True";
-        public void AddMovie(Movie movie)
+        public bool AddMovie(Movie movie)
         {
             using (SqlConnection con = new SqlConnection(connectionString))
             {
@@ -20,6 +20,7 @@ namespace MovieApp.Models.DataAccessLayers
                 cmd.ExecuteNonQuery();
                 con.Close();
             }
+            return true;
         }
         public IEnumerable<Movie> GetAllMovies()
         {

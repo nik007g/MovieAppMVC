@@ -12,10 +12,12 @@ namespace MovieApp.Models.DataAccessLayers
             movieAppDBContext = context;
         }
 
-        public void AddMovie(Movie movie)
+        public bool AddMovie(Movie movie)
         {
             movieAppDBContext.Add(movie);
             movieAppDBContext.SaveChanges();
+           return true;
+
         }
 
         public IEnumerable<Movie> GetAllMovies()

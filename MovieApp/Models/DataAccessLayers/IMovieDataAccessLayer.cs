@@ -4,7 +4,7 @@ namespace MovieApp.Models.DataAccessLayers
 {
     public interface IMovieDataAccessLayer
     {
-        public void AddMovie(Movie movie);
+        public bool AddMovie(Movie movie);
         public IEnumerable<Movie> GetAllMovies();
         public void Delete(int? id);
         public bool Update(Movie movie);
