@@ -11,6 +11,7 @@ namespace MovieApp.Models.Handlers
     {
         public String Email { get; set; }
         public string Password { get; set; }
+        public string FName { get; set; }
 
     }
     public class ResponseModel

@@ -10,12 +10,12 @@ using System.Threading.Tasks;
 
 namespace MovieApp.Models.Handlers
 {
-    public class GetMoviesRequestModel : IRequest<GetMoviesResponseModel>
+    public class GetMovieRequestModel : IRequest<GetMovieResponseModel>
     {
         public int? MovieId { set; get; }
 
     }
-    public class GetMoviesResponseModel
+    public class GetMovieResponseModel
     {
         public int MovieId { set; get; }
         [Required(ErrorMessage = "Enter Movie Name")]
@@ -25,21 +25,21 @@ namespace MovieApp.Models.Handlers
         public int Rating { set; get; }
     }
 
-    public class GetMoviesHandler : IRequestHandler<GetMoviesRequestModel, GetMoviesResponseModel>
+    public class GetMovieHandler : IRequestHandler<GetMovieRequestModel, GetMovieResponseModel>
     {
         IMovieDataAccessLayer movieDataAccessLayer;
         IMapper _mapper;
 
-        public GetMoviesHandler(IMovieDataAccessLayer _movieDataAccessLayer,IMapper mapper)
+        public GetMovieHandler(IMovieDataAccessLayer _movieDataAccessLayer,IMapper mapper)
         {
             _mapper = mapper;
             movieDataAccessLayer = _movieDataAccessLayer;
         }
      
 
-        public async Task<GetMoviesResponseModel> Handle(GetMoviesRequestModel request, CancellationToken cancellationToken)
+        public async Task<GetMovieResponseModel> Handle(GetMovieRequestModel request, CancellationToken cancellationToken)
         {
-            return _mapper.Map<GetMoviesResponseModel>(movieDataAccessLayer.GetMovies(request.MovieId));
+            return _mapper.Map<GetMovieResponseModel>(movieDataAccessLayer.GetMovies(request.MovieId));
             
         }
     }

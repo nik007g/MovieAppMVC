@@ -41,14 +41,14 @@ namespace MovieApp
             services.AddSingleton(mapper);
 
            // services.AddAutoMapper(typeof(Startup));
-
+           //Added Session
             services.AddSession(options =>
             { 
                 options.IdleTimeout = TimeSpan.FromMinutes(50);
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
-           
+           //DBContext
             services.AddDbContext<MovieProjectContext>(options => options.UseSqlServer(Configuration.GetConnectionString("MovieDatabase")));
             services.AddControllersWithViews();
            
@@ -79,6 +79,7 @@ namespace MovieApp
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+            
         }
     }
 }

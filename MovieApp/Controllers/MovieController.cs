@@ -25,10 +25,10 @@ namespace MovieApp.Controllers
 
         public IActionResult Index()
         {
-           /*if (checkInvalidSession())
+           if (checkInvalidSession())
             {
                 return RedirectToAction("Index", "Home");
-            }*/
+            }
             ViewData["User"] = HttpContext.Session.GetString("Email");
             return View(_mediator.Send(new GetAllMoviesRequestModel()).Result.Movies);
 
@@ -70,7 +70,7 @@ namespace MovieApp.Controllers
                 return RedirectToAction("Index", "Home");
             }
           
-            var movie=_mediator.Send(new GetMoviesRequestModel {MovieId=id });
+            var movie=_mediator.Send(new GetMovieRequestModel {MovieId=id });
             return View(_mapper.Map<UpdateMovieRequestModel>(movie.Result));
         }
 
@@ -98,7 +98,7 @@ namespace MovieApp.Controllers
             {
                 return NotFound();
             }
-            var movie = _mediator.Send(new GetMoviesRequestModel { MovieId = id });
+            var movie = _mediator.Send(new GetMovieRequestModel { MovieId = id });
             
             return View(_mapper.Map<Movie>(movie.Result));
         }

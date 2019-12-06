@@ -11,10 +11,15 @@ namespace MovieApp.Controllers
     public class HomeController : Controller
     {
         private IMediator _mediator;
+        public HomeController()
+        {
+
+        }
         public HomeController(IMediator mediator)
         { 
             _mediator = mediator;
         }
+
 
         public IActionResult Index()
         {
@@ -33,6 +38,7 @@ namespace MovieApp.Controllers
             if (result.Result.Success)
             {
                 HttpContext.Session.SetString("Email", requestModel.Email);
+            //    HttpContext.Session.SetString("FName", requestModel.FName);
                 TempData["User"] = requestModel.Email;
                 return RedirectToAction("Index", "Movie");
                 

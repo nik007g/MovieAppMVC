@@ -18,13 +18,13 @@ namespace MovieApp.Models
             //  CreateMap<UpdatePasswordRequestModel, User>();
             CreateMap<Movie, AddMovieRequestModel>().ReverseMap();
 
-            CreateMap<Movie, GetMoviesRequestModel>().ReverseMap();
+            CreateMap<Movie, GetMovieRequestModel>().ReverseMap();
             
 
-            CreateMap<Movie, GetMoviesResponseModel>().ReverseMap();
+            CreateMap<Movie, GetMovieResponseModel>().ReverseMap();
             CreateMap<Movie, UpdateMovieRequestModel>().ReverseMap();
 
-            CreateMap<GetMoviesResponseModel,UpdateMovieRequestModel>().ReverseMap();
+            CreateMap<GetMovieResponseModel,UpdateMovieRequestModel>().ReverseMap();
 
            
 
