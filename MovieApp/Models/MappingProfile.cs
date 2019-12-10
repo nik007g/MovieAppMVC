@@ -9,13 +9,13 @@ namespace MovieApp.Models
         public MappingProfile()
         {
             CreateMap<User, RequestModel>();
-           // CreateMap<RequestModel, User>();
+            CreateMap<RequestModel, User>();
 
             CreateMap<User, RegisterRequestModel>();
-          //  CreateMap<RegisterRequestModel, User>();
+            CreateMap<RegisterRequestModel, User>();
 
             CreateMap<User, UpdatePasswordRequestModel>();
-            //  CreateMap<UpdatePasswordRequestModel, User>();
+            CreateMap<UpdatePasswordRequestModel, User>();
             CreateMap<Movie, AddMovieRequestModel>().ReverseMap();
 
             CreateMap<Movie, GetMovieRequestModel>().ReverseMap();
@@ -25,12 +25,6 @@ namespace MovieApp.Models
             CreateMap<Movie, UpdateMovieRequestModel>().ReverseMap();
 
             CreateMap<GetMovieResponseModel,UpdateMovieRequestModel>().ReverseMap();
-
-           
-
-           
-
-
         }
     }
 }

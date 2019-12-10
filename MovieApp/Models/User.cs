@@ -12,9 +12,12 @@ namespace MovieApp.Models
 
         public string LName { set; get; }
 
-
         [Required(ErrorMessage = "Enter Valid Email")]
-        [DataType(DataType.EmailAddress)]
+      //  [DataType(DataType.EmailAddress)]
+         // [EmailAddress]
+        [RegularExpression(@"^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$",
+            ErrorMessage ="Entered Email format is not currect ")]
+          
         public string Email { set; get; }
 
 

@@ -11,22 +11,18 @@ namespace MovieApp.Controllers
     public class HomeController : Controller
     {
         private IMediator _mediator;
-        public HomeController()
-        {
-
-        }
+       
         public HomeController(IMediator mediator)
         { 
             _mediator = mediator;
         }
-
-
-        public IActionResult Index()
+        [ActionName("Index")] //we given actionname same but it is generally used to give different name to action method than mentioned.
+        public ViewResult Index()
         {
             return View();
         }
         [HttpGet]
-        public IActionResult User()
+        public ViewResult User()
         {
             return View();
         }
@@ -38,10 +34,8 @@ namespace MovieApp.Controllers
             if (result.Result.Success)
             {
                 HttpContext.Session.SetString("Email", requestModel.Email);
-            //    HttpContext.Session.SetString("FName", requestModel.FName);
                 TempData["User"] = requestModel.Email;
-                return RedirectToAction("Index", "Movie");
-                
+                return RedirectToAction("Index", "Movie");  
             }
             else
             {
@@ -49,7 +43,7 @@ namespace MovieApp.Controllers
                 return View();
             }
         }
-        public IActionResult Register()
+        public ViewResult Register()
         {
             return View();
         }
@@ -74,7 +68,7 @@ namespace MovieApp.Controllers
                 return View("Index");
             }
         }
-        public IActionResult UpdatePassword()
+        public ViewResult UpdatePassword()
         {
             return View();
         }
@@ -94,7 +88,7 @@ namespace MovieApp.Controllers
             }
         }
 
-        public IActionResult Privacy()
+        public ViewResult Privacy()
         {
             return View();
         }

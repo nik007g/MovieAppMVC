@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-
 namespace MovieApp.Models.DataAccessLayers
 {
     public class MovieDataAccesLayerADONET : IMovieDataAccessLayer
@@ -10,17 +9,32 @@ namespace MovieApp.Models.DataAccessLayers
         string connectionString = "Server=FSIND-LT-43; Database= MovieProject; Trusted_Connection = True";
         public bool AddMovie(Movie movie)
         {
-            using (SqlConnection con = new SqlConnection(connectionString))
+            if (movie.Rating > 10 || movie.Rating < 1)
             {
-                SqlCommand cmd = new SqlCommand("spAddMovie", con);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@MovieName", movie.MovieName);
-                cmd.Parameters.AddWithValue("@rating", movie.Rating);
-                con.Open();
-                cmd.ExecuteNonQuery();
-                con.Close();
+                throw new ArgumentOutOfRangeException("Rating Should be in between 0-10");
             }
-            return true;
+            else if (String.IsNullOrEmpty(movie.MovieName))
+            {
+                throw new ArgumentOutOfRangeException("Movie Name Can not be null");
+            }
+            if (CheckMovieDetails(movie.MovieName).MovieName != movie.MovieName)
+            {
+                using (SqlConnection con = new SqlConnection(connectionString))
+                {
+                    SqlCommand cmd = new SqlCommand("spAddMovie", con);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@MovieName", movie.MovieName);
+                    cmd.Parameters.AddWithValue("@rating", movie.Rating);
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    con.Close();
+                }
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
         public IEnumerable<Movie> GetAllMovies()
         {
@@ -97,5 +111,23 @@ namespace MovieApp.Models.DataAccessLayers
             }
             return movie;
         }
+        public Movie CheckMovieDetails(string MovieName)
+        {
+            Movie movie = new Movie();
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                SqlCommand cmd = new SqlCommand("spCheckMovieDetail", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@MovieName", SqlDbType.VarChar, 30).Value = MovieName;
+                con.Open();
+                SqlDataReader rdr = cmd.ExecuteReader();
+                while (rdr.Read())
+                {
+                    movie.MovieName = rdr["MovieName"].ToString();  
+                }
+            }
+            return movie;
+        }
+
     }
 }

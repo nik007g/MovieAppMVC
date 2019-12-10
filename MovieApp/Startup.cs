@@ -39,16 +39,14 @@ namespace MovieApp
 
             IMapper mapper = mappingConfig.CreateMapper();
             services.AddSingleton(mapper);
-
-           // services.AddAutoMapper(typeof(Startup));
            //Added Session
             services.AddSession(options =>
             { 
-                options.IdleTimeout = TimeSpan.FromMinutes(50);
+                options.IdleTimeout = TimeSpan.FromMinutes(60);
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
-           //DBContext
+           //DBContext connection String
             services.AddDbContext<MovieProjectContext>(options => options.UseSqlServer(Configuration.GetConnectionString("MovieDatabase")));
             services.AddControllersWithViews();
            
@@ -73,6 +71,7 @@ namespace MovieApp
             app.UseSession();
             app.UseRouting();
             app.UseAuthorization();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

@@ -10,38 +10,36 @@ namespace MovieApp.Models.DataAccessLayers
         string connectionString = "Server=FSIND-LT-43; Database= MovieProject; Trusted_Connection = True";
         public bool AddUser(User user)
         {
-            if (string.IsNullOrEmpty(user.Email) || !Regex.IsMatch(user.Email, @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z", RegexOptions.IgnoreCase))
-            {
-                throw new ArgumentNullException("Email Id Cannot be Null or Empty");
-            }
-            else if(string.IsNullOrEmpty(user.FName))
+             if (string.IsNullOrEmpty(user.FName))
             {
                 throw new ArgumentNullException("First Name Cannot be Null or Empty");
-
             }
             else if (string.IsNullOrEmpty(user.LName))
             {
                 throw new ArgumentNullException("Last Name Cannot be Null or Empty");
-
             }
-            else if(user.Password.Length <6)
+            else if (string.IsNullOrEmpty(user.Email) ||
+                !Regex.IsMatch(user.Email, @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z", RegexOptions.IgnoreCase))
+            {
+                throw new ArgumentNullException("Email Id Cannot be Null or Empty");
+            }
+            else if (user.Password.Length < 6)
             {
                 throw new ArgumentException("Password Length Should be More than 6");
             }
-            else if (user.Contact.Length != 10)
+            else if (user.Password != user.ConfirmPassword)
+            {
+                throw new ArgumentException("Both the Passwords Must be same");
+            }
+            else if (user.Contact.Length !=10)
             {
                 throw new ArgumentException("Contact Number must Have 10 digits");
             }
-            else if(user.Password != user.ConfirmPassword)
-            {
-                throw new ArgumentException("Both the Passwords Must be same");
-
-            }
+           
 
 
             if (CheckUserDetails(user.Email).Email != user.Email)
             {
-              
                 using (SqlConnection con = new SqlConnection(connectionString))
                 {
                     SqlCommand cmd = new SqlCommand("spAddUser", con);
@@ -79,9 +77,6 @@ namespace MovieApp.Models.DataAccessLayers
                 return true;
             }
         }
-
-      
-
         public bool CheckLogin(String Email,String Password)
         {
             using (SqlConnection con = new SqlConnection(connectionString))
